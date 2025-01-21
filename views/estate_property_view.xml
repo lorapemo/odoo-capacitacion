@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <!-- BÚSQUEDA -->
+    <record id="estate_property_search" model="ir.ui.view">
+        <field name="name">estate.property.search</field>
+        <field name="model">estate.property</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="postcode"/>
+            </search>
+        </field>
+    </record>
+
+    <!-- VISTA FORMULARIO -->
+    <record id="estate_property_view_form" model="ir.ui.view">
+        <field name="name">estate.property.view.form</field>
+        <field name="model">estate.property</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                        <h1>
+                            <field name="name" placeholder="Nombre de la Propiedad" options="{'line_breaks':False}" widget="text" />
+                        </h1>
+                    <group>
+                        <group>
+                            <field name="name"></field>
+                            <field name="postcode"></field>
+                            <field name="date_available"></field>
+                        </group>
+                        <group>
+                            <field name="expected_price"></field>
+                            <field name="selling_price"></field>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Descripción">
+                            <group class="col-12">
+                                <field name="description"></field>
+                                <field name="bedrooms"></field>
+                                <field name="living_area"></field>
+                                <field name="facades"></field>
+                                <field name="garage"></field>
+                                <field name="garden"></field>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- VISTA DE REGISTRO -->
+    <record id="estate_property_view_tree" model="ir.ui.view">
+        <field name="name">estate.property.view.tree</field>
+        <field name="model">estate.property</field>
+        <field name="arch" type ="xml">
+            <tree>
+                <field name="name"></field>
+                <field name="postcode"></field>
+                <field name="date_available"></field>
+                <field name="expected_price"></field>
+            </tree>
+        </field>
+    </record>
+
+    <!-- ACCIONES -->
+    <record id = "estate_property_action" model="ir.actions.act_window">
+        <field name="name">Propiedades</field>
+        <field name="res_model">estate.property</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="estate_property_view_tree"/>
+    </record>
+
+    <!-- MENU JERARQUICO -->
+    <menuitem id="estate_property_menu_root" name="Ventas">
+        <menuitem id="state_property_first_level" name="Gestion">
+            <menuitem id="estate_property_menu_action" action="estate_property_action"/>
+        </menuitem>
+    </menuitem>
+</odoo>
