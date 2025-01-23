@@ -9,6 +9,8 @@
             <search>
                 <field name="name"/>
                 <field name="postcode"/>
+                <!-- "[('model_name','operator','value')]" -->
+                <filter name="Mayor o igual a 1000" domain="[('selling_price','>=','1000')]"/>
             </search>
         </field>
     </record>
@@ -20,9 +22,12 @@
         <field name="arch" type="xml">
             <form>
                 <sheet>
-                        <h1>
-                            <field name="name" placeholder="Nombre de la Propiedad" options="{'line_breaks':False}" widget="text" />
-                        </h1>
+                    <h1>
+                        <field name="name" placeholder="Nombre de la Propiedad" options="{'line_breaks':False}" widget="text" />
+                    </h1>
+                    
+                    <field name="property_tags" widget="many2many_tags" placeholder="Etiqueta"></field>
+                        
                     <group>
                         <group>
                             <field name="name"></field>
@@ -32,6 +37,7 @@
                         <group>
                             <field name="expected_price"></field>
                             <field name="selling_price"></field>
+                            <field name="property_type_id"></field>
                         </group>
                     </group>
                     <notebook>
@@ -45,13 +51,60 @@
                                 <field name="garden"></field>
                             </group>
                         </page>
+                        <page string="Other Info">
+                            <group class="col-3">
+                                <field name="buyer" domain="[('customer_rank','>','0'), ('is_company','=','True')]"></field>
+                                <field name="seller"></field>
+                            </group>
+                        </page>
+                        <page string = "Oferta">
+                            <field name = "property_offers">
+                                <tree>
+                                    <!-- estate.property.offers -->
+                                    <field name="price" required='True'></field>
+                                    <field name="buyer"></field>
+                                    <field name="status"></field>
+                                </tree>
+                            </field>
+                        </page>
                     </notebook>
                 </sheet>
             </form>
         </field>
     </record>
 
-    <!-- VISTA DE REGISTRO -->
+    <record id="estate_property_type_view_form" model="ir.ui.view">
+        <field name="name">estate.property.type.view.form</field>
+        <field name="model">estate.property.type</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                        <h1>
+                            <field name="name" placeholder="Tipo de Propiedad" options="{'line_breaks':False}" widget="text" />
+                        </h1>
+                    <group>
+                        <group>
+                            <field name="name"></field>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+<!--     <record id="estate_property_offers_view_form" model="ir.ui.view">
+        <field name = 'name'>estate.property.offers.view.form</field>
+        <field name = 'model'>estate.property.offers</field>
+        <field name="arch" type="xml">
+            <tree>
+                    <field name="price"></field>
+                    <field name="buyer"></field>
+                    <field name="status"></field>
+            </tree>
+        </field>
+    </record> -->
+
+    <!-- VISTA DE REGISTRO -->   
     <record id="estate_property_view_tree" model="ir.ui.view">
         <field name="name">estate.property.view.tree</field>
         <field name="model">estate.property</field>
@@ -65,6 +118,38 @@
         </field>
     </record>
 
+    <record id="estate_property_type_view_tree" model="ir.ui.view">
+        <field name="name">estate.property.type.view.tree</field>
+        <field name="model">estate.property.type</field>
+        <field name="arch" type ="xml">
+            <tree>
+                <field name="name"></field>
+            </tree>
+        </field>
+    </record>
+
+    <record id="estate_property_tag_view_tree" model="ir.ui.view">
+        <field name="name">estate.property.tag.view.tree</field>
+        <field name="model">estate.property.tag</field>
+        <field name="arch" type ="xml">
+            <tree>
+                <field name="name"></field>
+            </tree>
+        </field>
+    </record>
+
+<!--     <record id="estate_property_offers_view_tree" model="ir.ui.view">
+        <field name = 'name'>estate.property.offers.view.tree</field>
+        <field name = 'model'>estate.property.offers</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="price"></field>
+                <field name="buyer"></field>
+                <field name="status"></field>
+            </tree>
+        </field>
+    </record> -->
+
     <!-- ACCIONES -->
     <record id = "estate_property_action" model="ir.actions.act_window">
         <field name="name">Propiedades</field>
@@ -73,10 +158,28 @@
         <field name="view_id" ref="estate_property_view_tree"/>
     </record>
 
+    <record id = "estate_property_type_action" model="ir.actions.act_window">
+            <field name="name">Tipo de propiedad</field>
+            <field name="res_model">estate.property.type</field>
+            <field name="view_mode">form,tree</field>
+            <field name="view_id" ref="estate_property_type_view_tree"/>
+    </record>
+
+    <record id = "estate_property_tag_action" model="ir.actions.act_window">
+        <field name="name">Etiquetas de propiedad</field>
+        <field name="res_model">estate.property.tag</field>
+        <field name="view_mode">form,tree</field>
+        <field name="view_id" ref="estate_property_tag_view_tree"/>
+    </record>
+
     <!-- MENU JERARQUICO -->
     <menuitem id="estate_property_menu_root" name="Ventas">
-        <menuitem id="state_property_first_level" name="Gestion">
-            <menuitem id="estate_property_menu_action" action="estate_property_action"/>
+        <menuitem id="estate_property_first_level" name="Gestion">
+            <menuitem id="estate_property_menu_action" action="estate_property_action" sequence="5"/>
+        </menuitem>
+        <menuitem id="estate_property_second_level" name="Ajustes">
+            <menuitem id="estate_property_type_menu_action" action="estate_property_type_action" sequence="5"/>
+            <menuitem id="estate_property_tag_menu_action" action="estate_property_tag_action" sequence="10"/>
         </menuitem>
     </menuitem>
 </odoo>

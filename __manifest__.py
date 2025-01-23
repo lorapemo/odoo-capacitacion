@@ -4,7 +4,8 @@
     'author' : 'Lorenzo Perez',
     'description' : 'Ventas de bienes raices',
     'depends' : [
-        'base'
+        'base',
+        'account'
     ],
     'data' : [
         'security/ir.model.access.csv',
