@@ -22,6 +22,10 @@
         <field name="arch" type="xml">
             <form>
                 <sheet>
+                <header>
+                    <button string='Vendido' class='oe_highlight' name='action_button_vendido' type="object"></button>
+                    <button string='Cancelado' class='btn-danger' name='action_button_cancelado' type="object"></button>
+                </header>
                     <h1>
                         <field name="name" placeholder="Nombre de la Propiedad" options="{'line_breaks':False}" widget="text" />
                     </h1>
@@ -31,13 +35,14 @@
                     <group>
                         <group>
                             <field name="name"></field>
+                            <field name="status" readonly='True' widget='badge'></field>
                             <field name="postcode"></field>
                             <field name="date_available"></field>
                         </group>
                         <group>
                             <field name="expected_price"></field>
                             <field name="selling_price"></field>
-                            <field name="property_type_id"></field>
+                            <field name="best_offer"></field>
                         </group>
                     </group>
                     <notebook>
@@ -49,6 +54,9 @@
                                 <field name="facades"></field>
                                 <field name="garage"></field>
                                 <field name="garden"></field>
+                                <field name="garden_area" invisible="garden == False"></field>
+                                <field name="garden_orientation" invisible = "garden == False"></field>
+                                <field name="total_area"></field>
                             </group>
                         </page>
                         <page string="Other Info">
@@ -58,51 +66,17 @@
                             </group>
                         </page>
                         <page string = "Oferta">
-                            <field name = "property_offers">
-                                <tree>
-                                    <!-- estate.property.offers -->
-                                    <field name="price" required='True'></field>
-                                    <field name="buyer"></field>
-                                    <field name="status"></field>
-                                </tree>
-                            </field>
+                            <field name = "property_offer"/>
                         </page>
                     </notebook>
                 </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
             </form>
         </field>
     </record>
-
-    <record id="estate_property_type_view_form" model="ir.ui.view">
-        <field name="name">estate.property.type.view.form</field>
-        <field name="model">estate.property.type</field>
-        <field name="arch" type="xml">
-            <form>
-                <sheet>
-                        <h1>
-                            <field name="name" placeholder="Tipo de Propiedad" options="{'line_breaks':False}" widget="text" />
-                        </h1>
-                    <group>
-                        <group>
-                            <field name="name"></field>
-                        </group>
-                    </group>
-                </sheet>
-            </form>
-        </field>
-    </record>
-
-<!--     <record id="estate_property_offers_view_form" model="ir.ui.view">
-        <field name = 'name'>estate.property.offers.view.form</field>
-        <field name = 'model'>estate.property.offers</field>
-        <field name="arch" type="xml">
-            <tree>
-                    <field name="price"></field>
-                    <field name="buyer"></field>
-                    <field name="status"></field>
-            </tree>
-        </field>
-    </record> -->
 
     <!-- VISTA DE REGISTRO -->   
     <record id="estate_property_view_tree" model="ir.ui.view">
@@ -118,58 +92,12 @@
         </field>
     </record>
 
-    <record id="estate_property_type_view_tree" model="ir.ui.view">
-        <field name="name">estate.property.type.view.tree</field>
-        <field name="model">estate.property.type</field>
-        <field name="arch" type ="xml">
-            <tree>
-                <field name="name"></field>
-            </tree>
-        </field>
-    </record>
-
-    <record id="estate_property_tag_view_tree" model="ir.ui.view">
-        <field name="name">estate.property.tag.view.tree</field>
-        <field name="model">estate.property.tag</field>
-        <field name="arch" type ="xml">
-            <tree>
-                <field name="name"></field>
-            </tree>
-        </field>
-    </record>
-
-<!--     <record id="estate_property_offers_view_tree" model="ir.ui.view">
-        <field name = 'name'>estate.property.offers.view.tree</field>
-        <field name = 'model'>estate.property.offers</field>
-        <field name="arch" type="xml">
-            <tree>
-                <field name="price"></field>
-                <field name="buyer"></field>
-                <field name="status"></field>
-            </tree>
-        </field>
-    </record> -->
-
     <!-- ACCIONES -->
     <record id = "estate_property_action" model="ir.actions.act_window">
         <field name="name">Propiedades</field>
         <field name="res_model">estate.property</field>
         <field name="view_mode">tree,form</field>
         <field name="view_id" ref="estate_property_view_tree"/>
-    </record>
-
-    <record id = "estate_property_type_action" model="ir.actions.act_window">
-            <field name="name">Tipo de propiedad</field>
-            <field name="res_model">estate.property.type</field>
-            <field name="view_mode">form,tree</field>
-            <field name="view_id" ref="estate_property_type_view_tree"/>
-    </record>
-
-    <record id = "estate_property_tag_action" model="ir.actions.act_window">
-        <field name="name">Etiquetas de propiedad</field>
-        <field name="res_model">estate.property.tag</field>
-        <field name="view_mode">form,tree</field>
-        <field name="view_id" ref="estate_property_tag_view_tree"/>
     </record>
 
     <!-- MENU JERARQUICO -->

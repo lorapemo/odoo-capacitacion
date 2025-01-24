@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <!-- VISTA FORMULARIO -->
+    <record id="estate_property_type_view_form" model="ir.ui.view">
+        <field name="name">estate.property.type.view.form</field>
+        <field name="model">estate.property.type</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                        <h1>
+                            <field name="name" placeholder="Tipo de Propiedad" options="{'line_breaks':False}" widget="text" />
+                        </h1>
+                    <group>
+                        <group>
+                            <field name="name"></field>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- VISTA DE REGISTRO -->
+    <record id="estate_property_type_view_tree" model="ir.ui.view">
+        <field name="name">estate.property.type.view.tree</field>
+        <field name="model">estate.property.type</field>
+        <field name="arch" type ="xml">
+            <tree>
+                <field name="name"></field>
+            </tree>
+        </field>
+    </record>
+
+    <!-- ACCIONES -->
+    <record id = "estate_property_type_action" model="ir.actions.act_window">
+            <field name="name">Tipo de propiedad</field>
+            <field name="res_model">estate.property.type</field>
+            <field name="view_mode">form,tree</field>
+            <field name="view_id" ref="estate_property_type_view_tree"/>
+    </record>
+
+</odoo>
